@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f8;
+    }
+
+    header {
+      background-color: #2c5364;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      position: relative;
+    }
+
+    .title {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .menu-button {
+      font-size: 1.8em;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+      min-width: 150px;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px 20px;
+      text-decoration: none;
+      color: #2c5364;
+      border-bottom: 1px solid #eee;
+    }
+
+    .menu a:last-child {
+      border-bottom: none;
+    }
+
+    .menu a:hover {
+      background-color: #f5f5f5;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h2 {
+      color: #2c5364;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 15px 20px;
+      }
+
+      .menu {
+        right: 20px;
+      }
+
+      .menu-button {
+        position: absolute;
+        right: 20px;
+        top: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="title">SSC Poly Staff</div>
+    <button class="menu-button" onclick="toggleMenu()">☰</button>
+    <div class="menu" id="menu">
+      <a href="#" onclick="showSection('home')">Home</a>
+      <a href="#" onclick="showSection('profile')">Profile</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </header>
+
+  <div class="content">
+    <div id="home-section">
+      <h2>Welcome, <span id="username"></span>!</h2>
+      <p>This is your staff dashboard home page.</p>
+    </div>
+
+    <div id="profile-section" class="hidden">
+      <h2>My Profile</h2>
+      <p><strong>Name:</strong> <span id="name"></span></p>
+      <p><strong>Role:</strong> <span id="role"></span></p>
+      <p><strong>Staff ID:</strong> <span id="id"></span></p>
+    </div>
+  </div>
+
+  <script>
+    const staffName = sessionStorage.getItem("staffName");
+    const role = sessionStorage.getItem("role");
+    const staffId = sessionStorage.getItem("staffId");
+
+    if (!staffName || !role || !staffId) {
+      alert("Unauthorized access or session expired. Please login again.");
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("username").textContent = staffName;
+    document.getElementById("name").textContent = staffName;
+    document.getElementById("role").textContent = role;
+    document.getElementById("id").textContent = staffId;
+
+    function logout() {
+      sessionStorage.clear();
+      window.location.href = "index.html";
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+
+    function showSection(section) {
+      document.getElementById("home-section").classList.add("hidden");
+      document.getElementById("profile-section").classList.add("hidden");
+
+      if (section === "home") {
+        document.getElementById("home-section").classList.remove("hidden");
+      } else if (section === "profile") {
+        document.getElementById("profile-section").classList.remove("hidden");
+      }
+
+      document.getElementById("menu").style.display = "none";
+    }
+
+    // Close menu if clicking outside
+    document.addEventListener("click", function (event) {
+      const menu = document.getElementById("menu");
+      const button = document.querySelector(".menu-button");
+      if (!menu.contains(event.target) && !button.contains(event.target)) {
+        menu.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
