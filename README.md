@@ -1,0 +1,2 @@
+# sscpolytechnic
+SSC Polytechnic
