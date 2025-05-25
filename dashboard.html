@@ -9,62 +9,115 @@
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: #f0f4f8;
+      display: flex;
+      min-height: 100vh;
     }
 
-    header {
+    /* Navigation Styles */
+    .nav-panel {
+      width: 250px;
       background-color: #2c5364;
       color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 20px;
+      transition: all 0.3s ease;
       position: relative;
+      z-index: 100;
     }
 
-    .title {
-      font-size: 1.5em;
+    .nav-header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .nav-title {
+      font-size: 1.3em;
       font-weight: bold;
+      margin: 0;
     }
 
-    .menu-button {
+    .nav-menu {
+      padding: 15px 0;
+    }
+
+    .nav-menu a {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .nav-menu a:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    .nav-menu a.active {
+      background-color: rgba(255,255,255,0.2);
+      border-left: 4px solid #38ef7d;
+    }
+
+    .nav-icon {
+      margin-right: 10px;
+      font-size: 1.2em;
+    }
+
+    /* Mobile Menu Button */
+    .mobile-menu-button {
+      display: none;
       font-size: 1.8em;
       background: none;
       border: none;
       color: white;
       cursor: pointer;
-    }
-
-    .menu {
-      display: none;
-      position: absolute;
-      top: 60px;
-      right: 20px;
-      background-color: white;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: fixed;
+      top: 15px;
+      left: 15px;
       z-index: 1000;
-      min-width: 150px;
     }
 
-    .menu a {
-      display: block;
-      padding: 12px 20px;
-      text-decoration: none;
-      color: #2c5364;
-      border-bottom: 1px solid #eee;
+    /* Main Content Styles */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
-    .menu a:last-child {
-      border-bottom: none;
+    header {
+      background-color: #2c5364;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
     }
 
-    .menu a:hover {
-      background-color: #f5f5f5;
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .user-name {
+      margin-right: 15px;
+    }
+
+    .logout-btn {
+      background: none;
+      border: 1px solid white;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background-color: rgba(255,255,255,0.1);
     }
 
     .content {
       padding: 30px;
+      flex: 1;
     }
 
     .hidden {
@@ -73,9 +126,10 @@
 
     h2 {
       color: #2c5364;
+      margin-top: 0;
     }
 
-    /* New Dashboard Cards Styles */
+    /* Dashboard Cards Styles */
     .dashboard-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -136,7 +190,32 @@
       background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);
     }
 
-    /* Responsive Adjustments */
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .nav-panel {
+        position: fixed;
+        left: -250px;
+        height: 100vh;
+        top: 0;
+      }
+
+      .nav-panel.open {
+        left: 0;
+      }
+
+      .mobile-menu-button {
+        display: block;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      header {
+        padding-left: 70px;
+      }
+    }
+
     @media (max-width: 768px) {
       .dashboard-cards {
         grid-template-columns: 1fr 1fr;
@@ -148,72 +227,107 @@
         grid-template-columns: 1fr;
       }
       
+      .content {
+        padding: 20px;
+      }
+
       header {
-        padding: 15px 20px;
-      }
-
-      .menu {
-        right: 20px;
-      }
-
-      .menu-button {
-        position: absolute;
-        right: 20px;
-        top: 15px;
+        padding: 15px 20px 15px 70px;
       }
     }
   </style>
 </head>
 <body>
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-button" id="mobileMenuButton">☰</button>
 
-  <header>
-    <div class="title">SSC Poly Staff</div>
-    <button class="menu-button" onclick="toggleMenu()">☰</button>
-    <div class="menu" id="menu">
-      <a href="#" onclick="showSection('home')">Home</a>
-      <a href="#" onclick="showSection('profile')">Profile</a>
-      <a href="#" onclick="logout()">Logout</a>
+  <!-- Navigation Panel -->
+  <div class="nav-panel" id="navPanel">
+    <div class="nav-header">
+      <div class="nav-title">SSC Poly Staff</div>
     </div>
-  </header>
+    <div class="nav-menu">
+      <a href="#" class="active" onclick="showSection('home')">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="#" onclick="showSection('profile')">
+        <span class="nav-icon">👤</span>
+        <span>Profile</span>
+      </a>
+      <a href="#" onclick="showSection('time-table')">
+        <span class="nav-icon">📅</span>
+        <span>Time Table</span>
+      </a>
+      <a href="#" onclick="showSection('duties')">
+        <span class="nav-icon">✅</span>
+        <span>My Duties</span>
+      </a>
+      <a href="#" onclick="logout()">
+        <span class="nav-icon">🚪</span>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
 
-  <div class="content">
-    <div id="home-section">
-      <h2>Welcome, <span id="username"></span>!</h2>
-      <p>This is your staff dashboard home page.</p>
-      
-      <!-- Dashboard Cards -->
-      <div class="dashboard-cards">
-        <div class="card card-1" onclick="alert('Summer 2025 Exam Time Table will be displayed')">
-          <div class="card-icon">📅</div>
-          <h3>Summer 2025 Exam Time Table</h3>
-          <p>View and download exam schedule</p>
-        </div>
+  <!-- Main Content -->
+  <div class="main-content">
+    <header>
+      <div class="user-info">
+        <span class="user-name" id="username"></span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <div id="home-section">
+        <h2>Welcome, <span id="welcome-name"></span>!</h2>
+        <p>This is your staff dashboard home page.</p>
         
-        <div class="card card-2" onclick="alert('Online Summer 2025 Exam Time Table will be displayed')">
-          <div class="card-icon">💻</div>
-          <h3>Online Summer 2025 Exam Time Table</h3>
-          <p>Online exam schedule details</p>
-        </div>
-        
-        <div class="card card-3" onclick="alert('Your scheduled duties will be displayed')">
-          <div class="card-icon">👨‍🏫</div>
-          <h3>My Scheduled Duties</h3>
-          <p>View your assigned duties</p>
-        </div>
-        
-        <div class="card card-4" onclick="alert('Duties performed will be displayed')">
-          <div class="card-icon">✅</div>
-          <h3>Duties Performed</h3>
-          <p>Track your completed duties</p>
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+          <div class="card card-1" onclick="alert('Summer 2025 Exam Time Table will be displayed')">
+            <div class="card-icon">📅</div>
+            <h3>Summer 2025 Exam Time Table</h3>
+            <p>View and download exam schedule</p>
+          </div>
+          
+          <div class="card card-2" onclick="alert('Online Summer 2025 Exam Time Table will be displayed')">
+            <div class="card-icon">💻</div>
+            <h3>Online Summer 2025 Exam Time Table</h3>
+            <p>Online exam schedule details</p>
+          </div>
+          
+          <div class="card card-3" onclick="alert('Your scheduled duties will be displayed')">
+            <div class="card-icon">👨‍🏫</div>
+            <h3>My Scheduled Duties</h3>
+            <p>View your assigned duties</p>
+          </div>
+          
+          <div class="card card-4" onclick="alert('Duties performed will be displayed')">
+            <div class="card-icon">✅</div>
+            <h3>Duties Performed</h3>
+            <p>Track your completed duties</p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div id="profile-section" class="hidden">
-      <h2>My Profile</h2>
-      <p><strong>Name:</strong> <span id="name"></span></p>
-      <p><strong>Role:</strong> <span id="role"></span></p>
-      <p><strong>Staff ID:</strong> <span id="id"></span></p>
+      <div id="profile-section" class="hidden">
+        <h2>My Profile</h2>
+        <p><strong>Name:</strong> <span id="name"></span></p>
+        <p><strong>Role:</strong> <span id="role"></span></p>
+        <p><strong>Staff ID:</strong> <span id="id"></span></p>
+      </div>
+
+      <div id="time-table-section" class="hidden">
+        <h2>Exam Time Tables</h2>
+        <p>Time table content will appear here</p>
+      </div>
+
+      <div id="duties-section" class="hidden">
+        <h2>My Duties</h2>
+        <p>Duties content will appear here</p>
+      </div>
     </div>
   </div>
 
@@ -228,6 +342,7 @@
     }
 
     document.getElementById("username").textContent = staffName;
+    document.getElementById("welcome-name").textContent = staffName;
     document.getElementById("name").textContent = staffName;
     document.getElementById("role").textContent = role;
     document.getElementById("id").textContent = staffId;
@@ -237,32 +352,41 @@
       window.location.href = "index.html";
     }
 
-    function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.style.display = (menu.style.display === "block") ? "none" : "block";
-    }
-
     function showSection(section) {
-      document.getElementById("home-section").classList.add("hidden");
-      document.getElementById("profile-section").classList.add("hidden");
-
-      if (section === "home") {
-        document.getElementById("home-section").classList.remove("hidden");
-      } else if (section === "profile") {
-        document.getElementById("profile-section").classList.remove("hidden");
+      // Hide all sections
+      document.querySelectorAll('.content > div').forEach(div => {
+        div.classList.add('hidden');
+      });
+      
+      // Show selected section
+      document.getElementById(`${section}-section`).classList.remove('hidden');
+      
+      // Update active menu item
+      document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+      
+      // Close mobile menu if open
+      if (window.innerWidth <= 992) {
+        document.getElementById('navPanel').classList.remove('open');
       }
-
-      document.getElementById("menu").style.display = "none";
     }
 
-    // Close menu if clicking outside
-    document.addEventListener("click", function (event) {
-      const menu = document.getElementById("menu");
-      const button = document.querySelector(".menu-button");
-      if (menu && button) {
-        if (!menu.contains(event.target) && !button.contains(event.target)) {
-          menu.style.display = "none";
-        }
+    // Mobile menu toggle
+    document.getElementById('mobileMenuButton').addEventListener('click', function() {
+      document.getElementById('navPanel').classList.toggle('open');
+    });
+
+    // Close menu when clicking outside on mobile
+    document.addEventListener('click', function(event) {
+      const navPanel = document.getElementById('navPanel');
+      const mobileButton = document.getElementById('mobileMenuButton');
+      
+      if (window.innerWidth <= 992 && 
+          !navPanel.contains(event.target) && 
+          !mobileButton.contains(event.target)) {
+        navPanel.classList.remove('open');
       }
     });
   </script>
