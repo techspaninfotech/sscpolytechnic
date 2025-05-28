@@ -3,223 +3,398 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SSC POLY - Login</title>
+  <title>Dashboard</title>
   <style>
-    * {
+    body {
       margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f8;
+      display: flex;
+      min-height: 100vh;
     }
 
-    body {
-      font-family: "Segoe UI", sans-serif;
-      height: 100vh;
+    /* Navigation Styles */
+    .nav-panel {
+      width: 250px;
+      background-color: #2c5364;
+      color: white;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 100;
+    }
+
+    .nav-header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .nav-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .nav-menu {
+      padding: 15px 0;
+    }
+
+    .nav-menu a {
       display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .nav-menu a:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    .nav-menu a.active {
+      background-color: rgba(255,255,255,0.2);
+      border-left: 4px solid #38ef7d;
+    }
+
+    .nav-icon {
+      margin-right: 10px;
+      font-size: 1.2em;
+    }
+
+    /* Mobile Menu Button */
+    .mobile-menu-button {
+      display: none;
+      font-size: 1.8em;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 1000;
+    }
+
+    /* Main Content Styles */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #2c5364;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .user-name {
+      margin-right: 15px;
+    }
+
+    .logout-btn {
+      background: none;
+      border: 1px solid white;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    .content {
+      padding: 30px;
+      flex: 1;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h2 {
+      color: #2c5364;
+      margin-top: 0;
+    }
+
+    /* Dashboard Cards Styles */
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .card {
+      border-radius: 10px;
+      padding: 25px 20px;
+      color: white;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80') no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
     }
 
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 0;
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
 
-    .login-container {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      width: 90%;
-      max-width: 400px;
-      animation: slideIn 0.8s ease-out;
-      position: relative;
-      z-index: 1;
+    .card h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.1em;
     }
 
-    @keyframes slideIn {
-      0% {
-        transform: translateY(-50px);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0px);
-        opacity: 1;
-      }
+    .card p {
+      margin: 0;
+      font-size: 0.9em;
+      opacity: 0.9;
     }
 
-    .logo-container {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .logo-container img {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
+    .card-icon {
+      font-size: 2em;
       margin-bottom: 15px;
     }
 
-    .logo-container h1 {
-      font-size: 1.5rem;
-      color: #2c5364;
-      margin-top: 10px;
-      line-height: 1.3;
+    /* Gradient Colors for Cards */
+    .card-1 {
+      background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
     }
 
-    .login-container input {
-      width: 100%;
-      padding: 12px 15px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: border 0.3s ease;
+    .card-2 {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
     }
 
-    .login-container input:focus {
-      border-color: #2c5364;
-      outline: none;
+    .card-3 {
+      background: linear-gradient(135deg, #f46b45 0%, #eea849 100%);
     }
 
-    .login-container button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 20px;
-      background-color: #2c5364;
-      border: none;
-      color: white;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
+    .card-4 {
+      background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);
     }
 
-    .login-container button:hover {
-      background-color: #1e3c51;
-      transform: translateY(-2px);
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .nav-panel {
+        position: fixed;
+        left: -250px;
+        height: 100vh;
+        top: 0;
+      }
+
+      .nav-panel.open {
+        left: 0;
+      }
+
+      .mobile-menu-button {
+        display: block;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      header {
+        padding-left: 70px;
+      }
     }
 
-    .login-container button:active {
-      transform: translateY(0);
-    }
-
-    .error {
-      color: #e74c3c;
-      font-size: 14px;
-      margin-top: 10px;
-      text-align: center;
+    @media (max-width: 768px) {
+      .dashboard-cards {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     @media (max-width: 480px) {
-      .login-container {
-        padding: 25px 20px;
+      .dashboard-cards {
+        grid-template-columns: 1fr;
       }
       
-      .logo-container h1 {
-        font-size: 1.3rem;
+      .content {
+        padding: 20px;
       }
-      
-      .login-container input, 
-      .login-container button {
-        padding: 10px 12px;
-        font-size: 15px;
+
+      header {
+        padding: 15px 20px 15px 70px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <div class="logo-container">
-      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhUr78R5uvtFKF64x73leyrDhOGCdwJ6H0vaJeXcHRIsPf1xGv-iWNNRQOSbmu36ZIfoNv78jKCVVM7jBm666OQ5KxZQNh3Lf7xU7mLHMEmqkQlmSpPtBdBw3PQEFvQIAfbG-w9lj6msm6F8Evgbwh0MoTEA39Hm4p7xGOQANN7AXhT7Ogg7WrHKGR2nI8/s320/20250202_104523-removebg-preview.png" alt="SSC Polytechnic Logo">
-      <h1>Sau Shantidevi Chavan Polytechnic</h1>
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-button" id="mobileMenuButton">☰</button>
+
+  <!-- Navigation Panel -->
+  <div class="nav-panel" id="navPanel">
+    <div class="nav-header">
+      <div class="nav-title">SSC Poly Staff</div>
     </div>
-    <input type="text" id="loginId" placeholder="Login ID" />
-    <input type="password" id="password" placeholder="Password" />
-    <button onclick="login()">Login</button>
-    <div class="error" id="error-msg"></div>
+    <div class="nav-menu">
+      <a href="#" class="active" onclick="showSection('home')">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="#" onclick="showSection('profile')">
+        <span class="nav-icon">👤</span>
+        <span>Profile</span>
+      </a>
+      <a href="#" onclick="showSection('time-table')">
+        <span class="nav-icon">📅</span>
+        <span>Time Table</span>
+      </a>
+      <a href="#" onclick="showSection('duties')">
+        <span class="nav-icon">✅</span>
+        <span>My Duties</span>
+      </a>
+      <a href="#" onclick="logout()">
+        <span class="nav-icon">🚪</span>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header>
+      <div class="user-info">
+        <span class="user-name" id="username"></span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <div id="home-section">
+        <h2>Welcome, <span id="welcome-name"></span>!</h2>
+        <p>This is your staff dashboard home page.</p>
+        
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+          <div class="card card-1" onclick="alert('Summer 2025 Exam Time Table will be displayed')">
+            <div class="card-icon">📅</div>
+            <h3>Summer 2025 Exam Time Table</h3>
+            <p>View and download exam schedule</p>
+          </div>
+          
+          <div class="card card-2" onclick="alert('Online Summer 2025 Exam Time Table will be displayed')">
+            <div class="card-icon">💻</div>
+            <h3>Online Summer 2025 Exam Time Table</h3>
+            <p>Online exam schedule details</p>
+          </div>
+          
+          <div class="card card-3" onclick="alert('Your scheduled duties will be displayed')">
+            <div class="card-icon">👨‍🏫</div>
+            <h3>My Scheduled Duties</h3>
+            <p>View your assigned duties</p>
+          </div>
+          
+          <div class="card card-4" onclick="alert('Duties performed will be displayed')">
+            <div class="card-icon">✅</div>
+            <h3>Duties Performed</h3>
+            <p>Track your completed duties</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="profile-section" class="hidden">
+        <h2>My Profile</h2>
+        <p><strong>Name:</strong> <span id="name"></span></p>
+        <p><strong>Role:</strong> <span id="role"></span></p>
+        <p><strong>Staff ID:</strong> <span id="id"></span></p>
+	<p><strong>Designation:</strong> <span id="des"></span></p>
+	<p><strong>Department:</strong> <span id="dep"></span></p>
+      </div>
+
+      <div id="time-table-section" class="hidden">
+        <h2>Exam Time Tables</h2>
+        <p>Time table content will appear here</p>
+      </div>
+
+      <div id="duties-section" class="hidden">
+        <h2>My Duties</h2>
+        <p>Duties content will appear here</p>
+      </div>
+    </div>
   </div>
 
   <script>
-    // Check if user is already logged in when page loads
-    document.addEventListener('DOMContentLoaded', function() {
-      checkSession();
+    const staffName = sessionStorage.getItem("staffName");
+    const role = sessionStorage.getItem("role");
+    const staffId = sessionStorage.getItem("staffId");
+	const designation = sessionStorage.getItem("designation");
+	const department = sessionStorage.getItem("department");
+
+    if (!staffName || !role || !staffId || !designation || !department) {
+      alert("Unauthorized access or session expired. Please login again.");
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("username").textContent = staffName;
+    document.getElementById("welcome-name").textContent = staffName;
+    document.getElementById("name").textContent = staffName;
+    document.getElementById("role").textContent = role;
+    document.getElementById("id").textContent = staffId;
+    document.getElementById("des").textContent = designation;
+    document.getElementById("dep").textContent = department;
+
+    function logout() {
+      sessionStorage.clear();
+      window.location.href = "login.html";
+    }
+
+    function showSection(section) {
+      // Hide all sections
+      document.querySelectorAll('.content > div').forEach(div => {
+        div.classList.add('hidden');
+      });
       
-      // Check session status every minute
-      setInterval(checkSession, 60000);
+      // Show selected section
+      document.getElementById(`${section}-section`).classList.remove('hidden');
+      
+      // Update active menu item
+      document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+      
+      // Close mobile menu if open
+      if (window.innerWidth <= 992) {
+        document.getElementById('navPanel').classList.remove('open');
+      }
+    }
+
+    // Mobile menu toggle
+    document.getElementById('mobileMenuButton').addEventListener('click', function() {
+      document.getElementById('navPanel').classList.toggle('open');
     });
 
-    async function checkSession() {
-      try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbz3FOyBc1ecYvBk4hSw_LPTr3Ro-5-naYjl3q6tUZ41FcSdibqTAM8q84nwAIvLOlcQ/exec");
-        const result = await response.json();
-        
-        if (result.loggedIn) {
-          // If session is valid, redirect to dashboard
-          window.location.href = "dashboard.html";
-        }
-      } catch (error) {
-        console.log("Session check failed - user not logged in");
+    // Close menu when clicking outside on mobile
+    document.addEventListener('click', function(event) {
+      const navPanel = document.getElementById('navPanel');
+      const mobileButton = document.getElementById('mobileMenuButton');
+      
+      if (window.innerWidth <= 992 && 
+          !navPanel.contains(event.target) && 
+          !mobileButton.contains(event.target)) {
+        navPanel.classList.remove('open');
       }
-    }
-
-    async function login() {
-      const loginId = document.getElementById("loginId").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const errorMsg = document.getElementById("error-msg");
-      errorMsg.textContent = "";
-
-      if (!loginId || !password) {
-        errorMsg.textContent = "Please enter Login ID and Password.";
-        return;
-      }
-
-      try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbwAWh_B0f5OSSbZyE1O2a0LprtQnYIfrmwXIRYKQUPvjzr8FiJ04sEYCwaA4juSgjeW/exec", {
-          method: "POST",
-          body: new URLSearchParams({
-            loginId: loginId,
-            password: password,
-          }),
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          // Store session data with timestamp
-          const sessionData = {
-            staffName: result.staffName,
-            staffId: result.staffId,
-            role: result.role,
-            designation: result.designation,
-            department: result.department,
-            lastActivity: new Date().getTime()
-          };
-          
-          localStorage.setItem("sessionData", JSON.stringify(sessionData));
-          sessionStorage.setItem("staffName", result.staffName);
-          sessionStorage.setItem("staffId", result.staffId);
-          sessionStorage.setItem("role", result.role);
-          sessionStorage.setItem("designation", result.designation);
-          sessionStorage.setItem("department", result.department);
-          
-          window.location.href = "dashboard.html";
-        } else {
-          errorMsg.textContent = "Invalid Login ID or Password.";
-        }
-      } catch (error) {
-        console.error("Login error:", error);
-        errorMsg.textContent = "Server error. Please try again.";
-      }
-    }
+    });
   </script>
 </body>
 </html>
