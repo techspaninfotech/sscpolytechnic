@@ -13,21 +13,36 @@
 
     body {
       font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      background: url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 0;
     }
 
     .login-container {
-      background: white;
-      padding: 40px 30px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
       border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      width: 100%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      width: 90%;
       max-width: 400px;
       animation: slideIn 0.8s ease-out;
+      position: relative;
+      z-index: 1;
     }
 
     @keyframes slideIn {
@@ -41,10 +56,23 @@
       }
     }
 
-    .login-container h2 {
+    .logo-container {
       text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-container img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 15px;
+    }
+
+    .logo-container h1 {
+      font-size: 1.5rem;
       color: #2c5364;
-      margin-bottom: 25px;
+      margin-top: 10px;
+      line-height: 1.3;
     }
 
     .login-container input {
@@ -54,6 +82,12 @@
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
+      transition: border 0.3s ease;
+    }
+
+    .login-container input:focus {
+      border-color: #2c5364;
+      outline: none;
     }
 
     .login-container button {
@@ -66,24 +100,48 @@
       font-size: 16px;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
 
     .login-container button:hover {
       background-color: #1e3c51;
+      transform: translateY(-2px);
+    }
+
+    .login-container button:active {
+      transform: translateY(0);
     }
 
     .error {
-      color: red;
+      color: #e74c3c;
       font-size: 14px;
       margin-top: 10px;
       text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 25px 20px;
+      }
+      
+      .logo-container h1 {
+        font-size: 1.3rem;
+      }
+      
+      .login-container input, 
+      .login-container button {
+        padding: 10px 12px;
+        font-size: 15px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="login-container">
-    <h2>SSC POLY</h2>
+    <div class="logo-container">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhUr78R5uvtFKF64x73leyrDhOGCdwJ6H0vaJeXcHRIsPf1xGv-iWNNRQOSbmu36ZIfoNv78jKCVVM7jBm666OQ5KxZQNh3Lf7xU7mLHMEmqkQlmSpPtBdBw3PQEFvQIAfbG-w9lj6msm6F8Evgbwh0MoTEA39Hm4p7xGOQANN7AXhT7Ogg7WrHKGR2nI8/s320/20250202_104523-removebg-preview.png" alt="SSC Polytechnic Logo">
+      <h1>Sau Shantidevi Chavan Polytechnic</h1>
+    </div>
     <input type="text" id="loginId" placeholder="Login ID" />
     <input type="password" id="password" placeholder="Password" />
     <button onclick="login()">Login</button>
@@ -103,7 +161,7 @@
       }
 
       try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbzfiTUbyrQ4689mkz_3I1PUPzT2lTWStuaLUCtqlYolAVBoJITtjsGM_tlqAMNgfjtg/exec", {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbwAWh_B0f5OSSbZyE1O2a0LprtQnYIfrmwXIRYKQUPvjzr8FiJ04sEYCwaA4juSgjeW/exec", {
           method: "POST",
           body: new URLSearchParams({
             loginId: loginId,
@@ -117,6 +175,8 @@
           sessionStorage.setItem("staffName", result.staffName);
           sessionStorage.setItem("staffId", result.staffId);
           sessionStorage.setItem("role", result.role);
+          sessionStorage.setItem("designation", result.designation);
+          sessionStorage.setItem("department", result.department);
           window.location.href = "dashboard.html";
         } else {
           errorMsg.textContent = "Invalid Login ID or Password.";
