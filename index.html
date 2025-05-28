@@ -149,6 +149,28 @@
   </div>
 
   <script>
+    // Check if user is already logged in when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      checkSession();
+      
+      // Check session status every minute
+      setInterval(checkSession, 60000);
+    });
+
+    async function checkSession() {
+      try {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbz3FOyBc1ecYvBk4hSw_LPTr3Ro-5-naYjl3q6tUZ41FcSdibqTAM8q84nwAIvLOlcQ/exec");
+        const result = await response.json();
+        
+        if (result.loggedIn) {
+          // If session is valid, redirect to dashboard
+          window.location.href = "dashboard.html";
+        }
+      } catch (error) {
+        console.log("Session check failed - user not logged in");
+      }
+    }
+
     async function login() {
       const loginId = document.getElementById("loginId").value.trim();
       const password = document.getElementById("password").value.trim();
@@ -172,11 +194,23 @@
         const result = await response.json();
 
         if (result.success) {
+          // Store session data with timestamp
+          const sessionData = {
+            staffName: result.staffName,
+            staffId: result.staffId,
+            role: result.role,
+            designation: result.designation,
+            department: result.department,
+            lastActivity: new Date().getTime()
+          };
+          
+          localStorage.setItem("sessionData", JSON.stringify(sessionData));
           sessionStorage.setItem("staffName", result.staffName);
           sessionStorage.setItem("staffId", result.staffId);
           sessionStorage.setItem("role", result.role);
           sessionStorage.setItem("designation", result.designation);
           sessionStorage.setItem("department", result.department);
+          
           window.location.href = "dashboard.html";
         } else {
           errorMsg.textContent = "Invalid Login ID or Password.";
