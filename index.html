@@ -317,8 +317,8 @@
         <p><strong>Name:</strong> <span id="name"></span></p>
         <p><strong>Role:</strong> <span id="role"></span></p>
         <p><strong>Staff ID:</strong> <span id="id"></span></p>
-	<p><strong>Designation:</strong> <span id="des"></span></p>
-	<p><strong>Department:</strong> <span id="dep"></span></p>
+        <p><strong>Designation:</strong> <span id="des"></span></p>
+        <p><strong>Department:</strong> <span id="dep"></span></p>
       </div>
 
       <div id="time-table-section" class="hidden">
@@ -334,27 +334,119 @@
   </div>
 
   <script>
-    const staffName = sessionStorage.getItem("staffName");
-    const role = sessionStorage.getItem("role");
-    const staffId = sessionStorage.getItem("staffId");
-	const designation = sessionStorage.getItem("designation");
-	const department = sessionStorage.getItem("department");
+    // Check authentication on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      checkAuth();
+      
+      // Set up activity tracking
+      setupActivityTracking();
+    });
 
-    if (!staffName || !role || !staffId || !designation || !department) {
-      alert("Unauthorized access or session expired. Please login again.");
-      window.location.href = "login.html";
+    function checkAuth() {
+      // First check sessionStorage (current session)
+      const staffName = sessionStorage.getItem("staffName");
+      const role = sessionStorage.getItem("role");
+      const staffId = sessionStorage.getItem("staffId");
+      const designation = sessionStorage.getItem("designation");
+      const department = sessionStorage.getItem("department");
+
+      // If no current session, check localStorage (remembered session)
+      if (!staffName || !role || !staffId || !designation || !department) {
+        const staffData = localStorage.getItem("staffData");
+        
+        if (staffData) {
+          const data = JSON.parse(staffData);
+          const now = new Date().getTime();
+          const thirtyMinutes = 30 * 60 * 1000; // 30 minutes in milliseconds
+          
+          // Check if session is still valid
+          if (now - data.lastActivity < thirtyMinutes) {
+            // Restore session from localStorage
+            sessionStorage.setItem("staffName", data.staffName);
+            sessionStorage.setItem("staffId", data.staffId);
+            sessionStorage.setItem("role", data.role);
+            sessionStorage.setItem("designation", data.designation);
+            sessionStorage.setItem("department", data.department);
+            
+            // Update last activity time
+            data.lastActivity = now;
+            localStorage.setItem("staffData", JSON.stringify(data));
+            
+            // Refresh user data in the UI
+            updateUserData();
+            return;
+          } else {
+            // Session expired
+            localStorage.removeItem("staffData");
+          }
+        }
+        
+        // If we get here, no valid session exists
+        alert("Session expired or unauthorized access. Please login again.");
+        window.location.href = "login.html";
+        return;
+      }
+      
+      // Update user data in the UI
+      updateUserData();
     }
 
-    document.getElementById("username").textContent = staffName;
-    document.getElementById("welcome-name").textContent = staffName;
-    document.getElementById("name").textContent = staffName;
-    document.getElementById("role").textContent = role;
-    document.getElementById("id").textContent = staffId;
-    document.getElementById("des").textContent = designation;
-    document.getElementById("dep").textContent = department;
+    function updateUserData() {
+      const staffName = sessionStorage.getItem("staffName");
+      const role = sessionStorage.getItem("role");
+      const staffId = sessionStorage.getItem("staffId");
+      const designation = sessionStorage.getItem("designation");
+      const department = sessionStorage.getItem("department");
+
+      document.getElementById("username").textContent = staffName;
+      document.getElementById("welcome-name").textContent = staffName;
+      document.getElementById("name").textContent = staffName;
+      document.getElementById("role").textContent = role;
+      document.getElementById("id").textContent = staffId;
+      document.getElementById("des").textContent = designation;
+      document.getElementById("dep").textContent = department;
+    }
+
+    function setupActivityTracking() {
+      // Update last activity time on any user interaction
+      const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+      
+      activityEvents.forEach(function(eventName) {
+        document.addEventListener(eventName, updateLastActivity, false);
+      });
+      
+      // Check every minute if session expired
+      setInterval(checkSessionTimeout, 60000);
+    }
+
+    function updateLastActivity() {
+      const staffData = localStorage.getItem("staffData");
+      
+      if (staffData) {
+        const data = JSON.parse(staffData);
+        data.lastActivity = new Date().getTime();
+        localStorage.setItem("staffData", JSON.stringify(data));
+      }
+    }
+
+    function checkSessionTimeout() {
+      const staffData = localStorage.getItem("staffData");
+      
+      if (staffData) {
+        const data = JSON.parse(staffData);
+        const now = new Date().getTime();
+        const thirtyMinutes = 30 * 60 * 1000;
+        
+        if (now - data.lastActivity >= thirtyMinutes) {
+          // Session expired
+          logout();
+        }
+      }
+    }
 
     function logout() {
       sessionStorage.clear();
+      localStorage.removeItem("staffData");
       window.location.href = "login.html";
     }
 
