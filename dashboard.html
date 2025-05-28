@@ -317,6 +317,8 @@
         <p><strong>Name:</strong> <span id="name"></span></p>
         <p><strong>Role:</strong> <span id="role"></span></p>
         <p><strong>Staff ID:</strong> <span id="id"></span></p>
+	<p><strong>Designation:</strong> <span id="des"></span></p>
+	<p><strong>Department:</strong> <span id="dep"></span></p>
       </div>
 
       <div id="time-table-section" class="hidden">
@@ -335,8 +337,10 @@
     const staffName = sessionStorage.getItem("staffName");
     const role = sessionStorage.getItem("role");
     const staffId = sessionStorage.getItem("staffId");
+	const designation = sessionStorage.getItem("designation");
+	const department = sessionStorage.getItem("department");
 
-    if (!staffName || !role || !staffId) {
+    if (!staffName || !role || !staffId || !designation || !department) {
       alert("Unauthorized access or session expired. Please login again.");
       window.location.href = "index.html";
     }
@@ -346,6 +350,8 @@
     document.getElementById("name").textContent = staffName;
     document.getElementById("role").textContent = role;
     document.getElementById("id").textContent = staffId;
+    document.getElementById("des").textContent = designation;
+    document.getElementById("dep").textContent = department;
 
     function logout() {
       sessionStorage.clear();
