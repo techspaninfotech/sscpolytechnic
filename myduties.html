@@ -595,7 +595,7 @@
     async function loadDutiesFromSheet() {
       try {
         // Replace with your Apps Script Web App URL
-        const response = await fetch(`YOUR_APPS_SCRIPT_URL?action=getDuties&initial=${facultyInitial}`, {
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbySwt7sUm6IFEP6l4YxpzxOb6LMLsfaTlw2_RpOQlGggIVCSBv2943MzL0ic6Iy-Fal/exec?action=getDuties&initial=${facultyInitial}`, {
           method: 'GET',
           mode: 'cors'
         });
