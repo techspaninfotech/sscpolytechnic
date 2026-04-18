@@ -129,7 +129,7 @@
     <div class="nav-menu">
       <a href="#" class="active" onclick="showSection('home')">🏠 Home</a>
       <a href="#" onclick="showSection('profile')">👤 Profile</a>
-      <a href="#" onclick="showSection('duties'); loadMyDuties()">✅ My Scheduled Duties</a>
+      <a href="#" onclick="showSection('duties'); loadMyDuties();">✅ My Duties</a>
       <a href="#" onclick="logout()">🚪 Logout</a>
     </div>
   </div>
@@ -167,21 +167,21 @@
 
       <!-- Duties -->
       <div id="duties-section" class="hidden">
-        <h2>My Scheduled Duties</h2>
+  <h2>My Scheduled Duties</h2>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Session</th>
-              <th>Duty</th>
-            </tr>
-          </thead>
-          <tbody id="dutiesTable">
-            <tr><td colspan="3">Loading...</td></tr>
-          </tbody>
-        </table>
-      </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Session</th>
+        <th>Duty</th>
+      </tr>
+    </thead>
+    <tbody id="dutiesTable">
+      <tr><td colspan="3">Loading...</td></tr>
+    </tbody>
+  </table>
+</div>
 
     </div>
   </div>
